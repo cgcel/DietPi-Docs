@@ -80,6 +80,24 @@ plugins:
     #minify_js: true
     #js_files:
     #- assets/javascripts/custom.js
+- i18n:
+    languages:
+      zh: "Chinese"
+      en: "English"
+    default_language: 'en'
+    no_translation:
+      zh: "此页面未翻译成中文."
+      en: "This page isn't translated to English."
+    translate_nav:
+      zh:
+        section title: "章节"
+        subsection: "小节"
+        page title: "中译页面"
+      en:
+        section title: "Section"
+        subsection: "Subsection"
+        page title: "Page with title translated"
+
 
 extra:
   social:
@@ -96,7 +114,9 @@ extra_css:
 nav:
 - HOME:
   - Overview: index.md
-  - Installation: install.md
+  - Installation: 
+    - install.md
+    - install.zh.md
   - Getting started: getting_started.md
   - Software options: software.md
   - DietPi tools: dietpi_tools.md
