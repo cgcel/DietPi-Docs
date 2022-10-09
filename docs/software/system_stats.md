@@ -1,3 +1,8 @@
+---
+title: System Statistics and Management Options
+description: Description of DietPi software options related to system statistics, monitoring and management
+---
+
 # System Stats & Management
 
 ## Overview
@@ -10,6 +15,8 @@
 - [**Netdata - Web interface system stats**](#netdata)
 - [**Webmin - Remote system management with web interface**](#webmin)
 - [**K3s - Lightweight Kubernetes**](#k3s)
+- [**MicroK8s - Low-ops, minimal production Kubernetes**](#microk8s)
+- [**Prometheus Node Exporter - Prometheus exporter for hardware and OS metrics**](#prometheus-node-exporter)
 
 ??? info "How do I run **DietPi-Software** and install **optimised software** items?"
     To install any of the **DietPi optimised software items** listed below run from the command line:
@@ -29,20 +36,20 @@
 
 ## DietPi-Dashboard
 
-DietPi-Dashboard is a very lightweight and standalone web interface for monitoring and managing your DietPi system with your favourite web browser. It is written in Rust.
+DietPi-Dashboard is a very lightweight and standalone web interface for monitoring and managing your DietPi system with your favourite web browser. It is written in Rust. An overview of its features is given by our article [here](https://dietpi.com/blog/?p=1137).
 
 ![DietPi-Dashboard screenshot](../assets/images/dietpi-dashboard.jpg){: width="700" height="346" loading="lazy"}
 
 !!! warning "DietPi-Dashboard is still in Beta!"
 
-    We hence do not recommend yet to actively use in on sensitive production systems.
+    We hence do not recommend to actively use it on sensitive production systems yet.
 
-=== "Access the web interface"
+=== "Web interface"
 
     DietPi-Dashboard is accessible by default at TCP port **5252**:
 
-    - URL = `http://<your.IP>:5252`
-    - Password = `<your software password>` (default: `dietpi`)
+    - URL: `http://<your.IP>:5252`
+    - Password: `<your software password>` (default: `dietpi`)
 
 === "Directories"
 
@@ -84,6 +91,22 @@ DietPi-Dashboard is a very lightweight and standalone web interface for monitori
 
     If you want to force a logout of all browsers without changing the password, you can instead change the secret. Generate an apply a new secret to the configuration file and restart the service. Every client and browser will then need to login again to continue using the DietPi-Dashboard, as the stored token that is based on password and secret has been invalidated.
 
+=== "Multiple nodes"
+
+    From DietPi v8.0 on, you can install DietPi-Dashboard as backend only node, with does not include an own web interface. Such backend only nodes can then be accessed from another full DietPi-Dashboard frontend/web interface. Additional nodes would need to be added manually into configuration file located at:
+
+    ```
+    /opt/dietpi-dashboard/config.toml
+    ```    
+
+    When doing changes, you need to restart the service afterwards:
+
+    ```sh
+    systemctl restart dietpi-dashboard
+    ```
+
+    !!! hint "Full DietPi-Dashboard nodes with frontend included can currently not be accessed from other frontends."
+
 === "Service control"
 
     DietPi-Dashboard by default is started as systemd service and can hence be controlled with the following commands:
@@ -104,7 +127,7 @@ DietPi-Dashboard is a very lightweight and standalone web interface for monitori
     systemctl restart dietpi-dashboard
     ```
 
-=== "View logs"
+=== "Logs"
 
     Service logs can be reviewed with the following command:
 
@@ -112,12 +135,13 @@ DietPi-Dashboard is a very lightweight and standalone web interface for monitori
     journalctl -u dietpi-dashboard
     ```
 
-=== "Update to latest version"
+=== "Update"
 
-    You can easily update DietPi-Dashboard by reinstalling it:
+    You can easily update DietPi-Dashboard by reinstalling it and restarting the service for the change to take effect:
 
     ```sh
     dietpi-software reinstall 200
+    systemctl restart dietpi-dashboard
     ```
 
 ***
@@ -361,7 +385,7 @@ Lightweight Kubernetes - The certified Kubernetes distribution built for IoT & E
 
     The default installation of K3s creates a single-node cluster.
     If you want to have a multi-node setup, you need to configure the nodes to speak to the others.
-    
+
     In `/boot/dietpi.txt`, edit the `SOFTWARE_K3S_EXEC` parameter to set command (`server` or `agent`).
     You can add other command-line parameters after the command.
 
@@ -371,7 +395,7 @@ Lightweight Kubernetes - The certified Kubernetes distribution built for IoT & E
     SOFTWARE_K3S_EXEC=server --disable=local-storage
     ```
 
-    If you need to add many command-line parameters, it is recommended to put them in a file instead, 
+    If you need to add many command-line parameters, it is recommended to put them in a file instead,
     keeping only the command (`server` or `agent`) in `/boot/dietpi.txt`.
     During installation, if `/boot/dietpi-k3s.yaml` exists, it is copied to `/etc/rancher/k3s/config.yaml`, and used by K3s.
     The format of this file is documented in the [K3s docs](https://rancher.com/docs/k3s/latest/en/installation/install-options/#configuration-file).
@@ -382,7 +406,7 @@ Lightweight Kubernetes - The certified Kubernetes distribution built for IoT & E
     Copy this to your client machine, and edit the `server` setting to point to the hostname of the server.
 
     Place the file in the default location (`~/.kube/config`), or point to it using the `KUBECONFIG` environment-variable.
-    
+
     You should now be able to interact with your Kubernetes cluster using `kubectl`:
 
     ```sh
@@ -400,5 +424,143 @@ Official website: <https://k3s.io>
 Official documentation: <https://rancher.com/docs/k3s/latest/en/>  
 Source code: <https://github.com/k3s-io/k3s>  
 License: [Apache 2.0](https://github.com/k3s-io/k3s/blob/master/LICENSE)
+
+## MicroK8s
+
+High availability - Low-ops, minimal production Kubernetes, for developers, cloud, clusters, workstations, Edge and IoT.
+
+![MicroK8s logo](../assets/images/microk8s.png){: width="300" height="150" loading="lazy"}
+
+=== "Connecting to your cluster"
+
+    To create a cluster out of two or more already-running MicroK8s instances, use the `microk8s` add-node command:
+
+    ```sh
+    microk8s add-node
+    ```
+
+    From the node you wish to join to this cluster, run the following:
+
+    ```sh
+    microk8s join 192.168.1.230:25000/92b2db237428470dc4fcfc4ebbd9dc81/2c0cb3284b05
+    ```
+
+    Use the `--worker` flag to join a node as a worker not running the control plane, e.g.:
+
+    ```sh
+    microk8s join 192.168.1.230:25000/92b2db237428470dc4fcfc4ebbd9dc81/2c0cb3284b05 --worker
+    ```
+
+    For most commands, you can use `microk8s` in front like below.
+
+    ```sh
+    microk8s kubectl get nodes
+    microk8s kubectl get napspaces
+    ```
+
+    MicroK8s does provide a few "addons", which can be seen below with the enable and disable command.
+
+    ```sh
+    microk8s status # to view the addons
+    microk8s enable dns # to enable addons
+    microk8s enable dashboard # to enable Kubernetes dashboard
+    ```
+
+=== "View logs"
+
+    Per-node log files can be in:
+
+    ```
+    /var/log/pods
+    ```
+
+***
+
+Official website: <https://microk8s.io/>  
+Official documentation: <https://microk8s.io/docs>  
+Addons documentation: <https://microk8s.io/docs/addons>  
+Source code: <https://github.com/ubuntu/microk8s>  
+License: [Apache 2.0](https://github.com/ubuntu/microk8s/blob/master/LICENSE)
+
+## Prometheus Node Exporter
+
+Prometheus exporter for hardware and OS metrics. This component exposes system metrics, so they can be scraped by an external [Prometheus server](https://prometheus.io/), which can aggregate metrics from many devices. These metrics can then be visualized through [Grafana](https://grafana.com/), the final piece of a very powerful monitoring stack.
+
+![Grafana Node Exporter interface screenshot](../assets/images/grafana_node_exporter_full.png){: width="800" height="395" loading="lazy"}
+
+On Raspberry Pi SBCs, this software will include the [Raspberry Pi Exporter](https://github.com/fahlke/raspberrypi_exporter), which will add RPi-specific metrics such as voltages, CPU frequencies and temperatures.
+
+=== "Metrics access"
+
+    The metrics endpoint of *Prometheus Node Exporter* is exposed at TCP port **9100** and can be accessed via:
+
+    - URL = `http://<your.IP>:9100/metrics`
+
+=== "Configuration"
+
+    ???+ important "Prometheus server not included"
+        Note that this software component **does not** install or configure a Prometheus server, it must be installed separately.
+
+    Your Prometheus server needs to be configured in order to scrape Node Exporter metrics. Full configuration of the Prometheus server is outside the scope of this documentation, but here is a sample `prometheus.yml` file for reference:
+
+    ```yaml
+    global:
+      scrape_interval: 15s
+
+    scrape_configs:
+    - job_name: your.hostname
+      static_configs:
+      - targets: ['your.IP:9100']
+    ```
+
+=== "Grafana dashboard"
+
+    ???+ important "Grafana not included"
+        Note that this software component **does not** install or configure Grafana, it must be installed separately.
+
+    There are [many pre-made templates](https://grafana.com/grafana/dashboards/?search=node+exporter) of Grafana dashboards for visualizing data collected from a Prometheus Node Exporter. A good starting point is [Node Exporter Full](https://grafana.com/grafana/dashboards/1860). You can import it directly into your Grafana instance by using ID **1860**.
+
+=== "Service control"
+
+    Since Prometheus Node Exporter runs as a systemd service, it can be controlled with the following commands:
+
+    ```sh
+    systemctl status node_exporter
+    ```
+
+    ```sh
+    systemctl start node_exporter
+    ```
+
+    ```sh
+    systemctl stop node_exporter
+    ```
+
+    ```sh
+    systemctl restart node_exporter
+    ```
+
+=== "Logs"
+
+    Prometheus Node Exporter runs as a systemd service, hence logs can be viewed with the following command:
+
+    ```sh
+    journalctl -u node_exporter
+    ```
+
+=== "Update"
+
+    Prometheus Node Exporter can be updated by simply reinstalling it:
+
+    ```sh
+    dietpi-software reinstall 99
+    ```
+
+***
+
+Official website: <https://github.com/prometheus/node_exporter>  
+Documentation: <https://prometheus.io/docs/guides/node-exporter/>  
+Prometheus RPi Exporter: <https://github.com/fahlke/raspberrypi_exporter>  
+License: [Apache 2.0](https://github.com/prometheus/node_exporter/blob/master/LICENSE), [MIT](https://github.com/fahlke/raspberrypi_exporter/blob/master/LICENSE) (for RPi Exporter)
 
 [Return to the **Optimised Software list**](../../software/)

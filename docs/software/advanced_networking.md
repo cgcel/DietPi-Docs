@@ -1,3 +1,8 @@
+---
+title: Advanced Networking Software Options
+description: Description of DietPi software options related to networking
+---
+
 # Advanced Networking
 
 ## Overview
@@ -64,7 +69,7 @@ This is perfect for users requiring anonymity and privacy.
 
 It also Installs:
 
-- [WiFi HotSpot](#wifi-hotspot_1)
+- [WiFi HotSpot](#wifi-hotspot)
 
 ![DietPi WiFi hotspot tor](../assets/images/dietpi-software-advanced-networking-torhotspot.png){: width="550" height="308" loading="lazy"}
 
@@ -77,7 +82,7 @@ It also Installs:
 
 === "Connection credentials"
 
-    These are identical to the [WiFi HotSpot credentials](#wifi-hotspot_1).
+    These are identical to the [WiFi HotSpot credentials](#wifi-hotspot).
 
 === "Verification"
 
@@ -122,8 +127,9 @@ It is best suited for high traffic web sites and powers quite a number of the wo
     The stats web interface is accessible via port **1338**:
 
     - URL = `http://<your.IP>:1338`
+    - Prometheus metrics = `http://<your.IP>:1338/metrics`
     - Username = `admin`
-    - Password = `dietpi`
+    - Password = `<yourGlobalSoftwarePassword>` (default: `dietpi`)
 
     !!! hint "This installation was made possible by Jerome Queneuder, who provided the methods for compiling and installation."
 

@@ -1,3 +1,8 @@
+---
+title: Hardware Projects Software Options
+description: Description of DietPi software options related to hardware
+---
+
 # Hardware Projects
 
 ## Overview
@@ -342,19 +347,15 @@ Also installs:
 
 ![Blynk app on a smartphone](../assets/images/dietpi-software-hardwareprojects-blynk.jpg){: width="375" height="400" loading="lazy"}
 
-=== "Access to the web admin interface"
+=== "Web interface"
 
     The web interface uses port **9443**:
 
-    - URL = `https://<your.IP>:9443/admin` (You may ignore the browser warning, as a self-signed certificate is used by default.)
+    - URL: `https://<your.IP>:9443/admin` (You may ignore the browser warning, as a self-signed certificate is used by default.)
     - Email address: `admin@blynk.cc`
-    - Password: A random password is generated at first service start, which can be found by running the following command:
+    - Password: `<your global password>` (default: `dietpi`)
 
-        ```sh
-        journalctl -u blynkserver.service | grep password
-        ```
-
-=== "Installation notes"
+=== "Setup details"
 
     DietPi installs Blynk (including user data and config file) to the following location:
 
@@ -362,7 +363,13 @@ Also installs:
     /mnt/dietpi_userdata/blynk
     ```
 
-    Log files can be found in:
+    Logs can be viewed via:
+
+    ```sh
+    journalctl -u blynkserver
+    ```
+
+    and more detailed log files in:
 
     ```
     /var/log/blynk
@@ -376,7 +383,7 @@ Also installs:
 
     DietPi will also install the ***Blynk JS library***, along with this installation. Please skip this section when you reach the Blynk user guide.
 
-=== "Server configuration"
+=== "Configuration"
 
     !!! warning "Config file changes via web UI do not have any effect."
 
@@ -394,25 +401,32 @@ Also installs:
 
 === "Getting started with Blynk app"
 
+    !!! warning "The new "Blynk IoT" app does not support a self-hosted Blynk server!"
+
+        The "legacy" Blynk app will prompt hints about the new "Blynk IoT" app at several places. You need to ignore these since the new app does not support self-hosted Blynk severs, but only the Blynk Inc. cloud.
+
     1. Download the Blynk app for Android: <https://play.google.com/store/apps/details?id=cc.blynk>
     2. To log into your own server, press `Log In`, then the three dots at the bottom and switch the slider to `CUSTOM`.
-    3. There you can enter your own Blynk servers IP/domain and use the above login credentials.
+    3. There you can enter your own Blynk server's IP/domain and use the above login credentials.
     4. Create a new project by following this guide: <https://docs.blynk.cc/#getting-started-getting-started-with-the-blynk-app-2-create-a-new-project>
     5. The authentication token for the new project can be obtained from the app and as well from the web interface at `Users` > `admin@blynk.cc` within the `Profile DashBoards` section. Use it to connect with your Blynk library Node scripts.
 
 === "Run test script"
 
-    Once you create a project in the iOS/Android app, you may test the connection via
+    Once you created a project in the iOS/Android app, you may test the connection via `/mnt/dietpi_userdata/blynk/client-tcp-local.js`. You need to edit the file and replace `YOUR_AUTH_TOKEN` with the authentication token of your project. Then run it:
 
-        ```sh
-        blynk-client '<authentication token>'
-        ```
+    ```sh
+    /mnt/dietpi_userdata/blynk/client-tcp-local.js
+    ```
 
-        But the TLS connection usually fails with the self-signed certificates. If Let's Encrypt was setup before, the Blynk server will use it automatically, which should allow TLS connection. If it does not work, check out the example scripts to connect via plain TCP: <https://github.com/vshymanskyy/blynk-library-js/blob/master/examples/nodejs/client-tcp-local.js>
+    Within the script you can also define event listeners and handlers. By default the value of the virtual pin `V1` is printed to console when it changes, and the value of the virtual pin `V9` is set to system time seconds whenever the pin is read. For a more interactive test you could hence add the following widgets to your project via app:
 
-        The HTTP port can be seen and changed via config file. See the "Server configuration" tab.
+    1. Add a `Button` and change its `OUTPUT` pin to `Virtual` > `V1`. Go back and hit the play button. Whenever you push the button in the app, the test script console should print the value changes as defined.
+    2. Hit the stop button. Add a `Value Display`, change its `INPUT` pin to `Virtual` > `V9` and the `READING RATE` to `1 sec`. Go back and hit the start button. While the test script is running, the display widget will not show the server's system time seconds, updated every 1-2 seconds.
 
-=== "Update to the latest version"
+    Hit ++ctrl+c++ to exit the test script.
+
+=== "Update"
 
     Update Blynk with:
 
@@ -449,84 +463,6 @@ See <https://www.audiophonics.fr/en/raspberry-pi-and-other-sbc-accessories/audio
 To power off the system begin the shutdown process: Hold the power button for < 0.5 seconds. If you don't have a button, you can also close the pins `BP PIN C` and `BP PIN NO`, with your favorite electrically conductive metal (e.g.: tweezers).  
 Remark: Avoid holding the power button for longer than 2 seconds, as this will hard power off the system (same effect as pulling the power cord). Doing so will create file-system corruptions, during shutdown IO operations.
 
-## InfluxDB
-
-InfluxDB is a database optimized to save time based data as logs or data from a sensor.  
-The main interface to the database for management and data transferred are HTTP requests that are handled directly by the `influxdb` service (default port being used is 8086).
-
-The data can be nicely viewed with Grafana.  
-This installation and documentation was possible, thanks to [@marcobrianza](https://github.com/MichaIng/DietPi/issues/1784#issuecomment-390778313).
-
-![InfluxDB logo](../assets/images/dietpi-software-webstack-influxdb.svg){: width="300" height="112" loading="lazy"}
-
-### Usage
-
-The package comes with a command line tool `influx` for database management operations.  
-This tool also uses HTTP so it can manage a database on a remote machine setting the -host option.
-
-#### Create a database
-
-To create a database execute:
-
-```sh
-influx -execute 'create database mydb'
-```
-
-Alternative method:
-
-```sh
-curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"
-```
-
-#### Posting data
-
-Data can be posted by executing:
-
-```sh
-curl -i -XPOST 'http://localhost:8086/write?db=mydb' --data-binary 'temperature value=20.12'
-```
-
-#### Show data
-
-```sh
-influx -database mydb -execute 'SELECT * FROM temperature'
-```
-
-Alternative method:
-
-```sh
-curl -i -XPOST http://localhost:8086/query?db=mydb --data-urlencode "q=SELECT * FROM temperature"
-```
-
-#### Authentication
-
-By default HTTP authentication is disabled. To enable it, change `auth-enabled = true` in the configuration file `/etc/influxdb/influxdb.conf`. Then restart services with `dietpi-services restart`.
-
-#### Create users and authorizations from `influx` CLI
-
-To start the InfluxDB database management interface enter:
-
-```sh
-influx -username admin -password admin01
-```
-
-Then create the database entries:
-
-```sh
-CREATE USER admin WITH PASSWORD 'admin01' WITH ALL PRIVILEGES
-CREATE USER test_user WITH PASSWORD 'test_user01'
-GRANT ALL ON mydb TO test_user
-exit
-```
-
-### Install information
-
-The data location for InfluxDB is stored resp. linked with symbolic links to the DietPi userdata directory: `/mnt/dietpi_userdata/influxdb`
-
-***
-
-Official documentation: <https://docs.influxdata.com/influxdb>
-
 ## Grafana
 
 The open platform for beautiful analytics and monitoring.
@@ -553,9 +489,9 @@ Remark: Grafana binaries are specific to the CPU architecture, therefore, swappi
 
     The web interface is accessible via port **3001**:
 
-    - URL = `http://<your.IP>:3001`
-    - Username = `admin`
-    - Password = `<your global password>`
+    - URL: `http://<your.IP>:3001`
+    - Username: `admin`
+    - Password: `<your global password>` (default: `dietpi`)
 
 === "Usage information"
 

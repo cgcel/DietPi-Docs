@@ -1,3 +1,8 @@
+---
+title: DietPi Software Options
+description: Overview of ready-to-run DietPi-Software options, cloud & backup servers, media streaming & download servers, forums, system monitoring & management and more
+---
+
 # DietPi software options
 
 ## Overview
@@ -34,6 +39,8 @@
 - [**Radarr - Automatically download Movies**](bittorrent/#radarr)
 - [**Bazarr - Automatically download Subtitles for Sonarr/Radarr**](bittorrent/#bazarr)
 - [**Lidarr - Automatically download Music**](bittorrent/#lidarr)
+- [**Readarr - Automatically download Ebooks**](bittorrent/#readarr)
+- [**Prowlarr - Indexer manager & proxy for PVR**](bittorrent/#prowlarr)
 - [**Jackett - API Support for your favourite torrent trackers**](bittorrent/#jackett)
 - [**NZBGet - NZB download manager with web interface**](bittorrent/#nzbget)
 - [**HTPC Manager - combines all your favourite software into one slick interface**](bittorrent/#htpc-manager)
@@ -60,6 +67,7 @@
 - [**vaultwarden - Unofficial Bitwarden password manager server written in Rust**](cloud/#vaultwarden)
 - [**FuguHub - Your Own Personal Cloud Server**](cloud/#fuguhub)
 - [**File Browser - Light web based file manager with sharing features**](cloud/#file-browser)
+- [**Rclone - Utility to sync your files to cloud storages**](cloud/#rclone)
 
 ## [Databases & Data Stores](databases/#overview)
 
@@ -81,6 +89,7 @@
 ### [Desktop Utilities](desktop/)
 
 - [**Chromium - Web browser**](desktop/#chromium)
+- [**Firefox - Web browser**](desktop/#firefox)
 - [**GIMP - Image editor**](desktop/#gimp)
 - [**QuiteRSS - RSS and Atom news feeds reader**](desktop/#quiterss)
 - [**Xfce Power Manager - Power manager with brightness control**](desktop/#xfce-power-manager)
@@ -160,7 +169,7 @@
 - [**O!MPD - Feature-rich web Interface audio player for MPD**](media/#ompd)
 - [**CAVA - Optional: Console-based audio visualizer for MPD**](media/#cava)
 - [**Mopidy - Web Interface Music /Radio Player**](media/#mopidy)
-- [**Airsonic - Feature rich media streaming server with web interface**](media/#airsonic)
+- [**Airsonic-Advanced - Feature rich media streaming server with web interface**](media/#airsonic)
 - [**Logitech Media Server - aka LMS, Squeezebox Server**](media/#logitech-media-server)
 - [**Squeezelite - Audio player for Logitech Media Server**](media/#squeezelite)
 - [**Shairport Sync - AirPlay audio player with multiroom sync**](media/#shairport-sync)
@@ -186,6 +195,7 @@
 - [**Beets - Music organizer and manager**](media/#beets)
 - [**Snapcast Server - Multi room audio server**](media/#snapcast-server)
 - [**Snapcast Client - Multi room audio client**](media/#snapcast-client)
+- [**Navidrome - Web interface media streaming server**](media/#navidrome)
 
 ## [Printing Server](printing/)
 
@@ -213,7 +223,6 @@
 - [**Wordpress - Website Blog and Publishing platform**](social/#wordpress)
 - [**Single File PHP Gallery - Host and browse your images from a web interface**](social/#single-file-php-gallery)
 - [**Baïkal - Lightweight CalDAV + CardDAV server**](social/#baikal)
-- [**OpenBazaar - Decentralized peer to peer market server using Bitcoin**](social/#openbazaar)
 - [**Synapse - Decentralized communication with the Matrix protocol**](social/#synapse)
 
 ## [SSH Server](ssh/)
@@ -236,12 +245,16 @@
 - [**Netdata - Web interface system stats**](system_stats/#netdata)
 - [**Webmin - Remote system management with web interface**](system_stats/#webmin)
 - [**K3s - Lightweight Kubernetes**](system_stats/#k3s)
+- [**MicroK8s - Low-ops, minimal production Kubernetes**](system_stats/#microk8s)
+- [**Prometheus Node Exporter - Prometheus exporter for hardware and OS metrics**](system_stats/#prometheus-node-exporter)
 
 ## [VPN](vpn/)
 
 - [**OpenVPN - Easy to use, minimal hassle VPN server**](vpn/#openvpn)
 - [**PiVPN - OpenVPN server installer & management tool**](vpn/#pivpn)
 - [**WireGuard - An extremely simple yet fast and modern VPN**](vpn/#wireguard)
+- [**Tailscale - Zero config VPN**](vpn/#tailscale)
+- [**ZeroTier - Free easy to deploy cloud-hosted VPN service**](vpn/#zerotier)
 
 ## [Web development](webserver_stack/)
 
@@ -263,5 +276,7 @@
 
 ### [Programming & Web development Frameworks](webserver_stack/#web-development-programming-frameworks)
 
-- [**Flask - Micro web framework powered by Python**](webserver_stack/#flask)
 - [**PHP - Scripting language especially suited to web development**](webserver_stack/#php)
+- [**PHP Composer** - A Dependency Manager for PHP](webserver_stack/#php-composer)
+- [**Flask - Micro web framework powered by Python**](webserver_stack/#flask)
+- [**Node.js** - JavaScript runtime designed to build scalable network applications](webserver_stack/#nodejs)

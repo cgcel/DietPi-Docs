@@ -1,4 +1,9 @@
-# Social / Search
+---
+title: Social and Publishing Software Options
+description: Description of DietPi software options related to social platforms and publishing servers
+---
+
+# Social & Search
 
 ## Overview
 
@@ -6,8 +11,8 @@
 - [**phpBB - Free flat-forum bulletin board software solution**](#phpbb)
 - [**Wordpress - Website Blog and Publishing platform**](#wordpress)
 - [**Single File PHP Gallery - Host and browse your images from a web interface**](#single-file-php-gallery)
+<!-- markdownlint-disable-next-line MD051 -->
 - [**Baïkal - Lightweight CalDAV + CardDAV server**](#baikal)
-- [**OpenBazaar - Decentralized peer to peer market server using Bitcoin**](#openbazaar)
 - [**Synapse - Decentralized communication with the Matrix protocol**](#synapse)
 
 ??? info "How do I run **DietPi-Software** and install **optimised software** items?"
@@ -196,31 +201,6 @@ Baïkal is a lightweight CalDAV + CardDAV server.
     - Username = `admin`
     - Password = What you set during first run setup above.
 
-## OpenBazaar
-
-OpenBazaar is a free decentralised peer to peer market server for all. No fees. Usage of Bitcoins.  
-Oldschool: Think Napster, but for buying and selling stuff using your Bitcoins.
-
-![OpenBazaar client screenshot](../assets/images/dietpi-software-social-openbazaar.png){: width="400" height="240" loading="lazy"}
-
-=== "OpenBazaar Client"
-
-    The client will allow you to browse and trade, within the OpenBazaar market network.  
-    <https://www.openbazaar.org/download/>
-
-=== "Connecting OpenBazaar Client to your OpenBazaar Server"
-
-    Step 1:  
-    During installation, you will be asked to enter a username, password, and allowed IP address.
-
-    Step 2:  
-    Next, you will need to open the OpenBazaar Client and add your server:
-
-    - Click Menu (top right)
-    - Click New Server
-    - Select Standalone
-    - Enter the IP address of your DietPi device, and, the username and password you applied in step 1.
-
 ## Synapse
 
 Synapse is a server, written in Python, for communication using the Matrix protocol.
@@ -263,7 +243,7 @@ Synapse is a server, written in Python, for communication using the Matrix proto
     - Stop: `systemctl stop synapse`
     - Restart: `systemctl restart synapse`
     - Reload config: `systemctl reload synapse`
-    - Print status: `systemctl start synapse`
+    - Print status: `systemctl status synapse`
 
 === "View logs"
 
